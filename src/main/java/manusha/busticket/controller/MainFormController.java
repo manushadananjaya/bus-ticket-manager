@@ -1,15 +1,25 @@
 package manusha.busticket.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import manusha.busticket.util.DatabaseConnection;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javafx.event.ActionEvent; // Import ActionEvent
+import java.util.EventObject;
+
+import javafx.event.ActionEvent;
 
 public class MainFormController {
 
@@ -24,24 +34,26 @@ public class MainFormController {
 
     @FXML
     private void initialize() {
-        // Link the button action to the correct handler method
-        btnsignin.setOnAction(this::handleSignIn); // Correctly link the ActionEvent handler
+        btnsignin.setOnAction(this::handleSignIn);
     }
 
-    // Method to handle button click event
     @FXML
     void handleSignIn(ActionEvent event) {
-        // Call the private sign-in logic method
         handleSignIn();
     }
 
-    // Method to handle sign-in action logic
     private void handleSignIn() {
-        String username = txtuname.getText();
-        String password = txtpword.getText();
+        String username = txtuname.getText().trim();
+        String password = txtpword.getText().trim();
+
+        // Check if username or password fields are empty
+        if (username.isEmpty() || password.isEmpty()) {
+            // Show warning alert if fields are empty
+            showAlert(AlertType.WARNING, "Validation Error", "Please fill in all fields.");
+            return;
+        }
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            // SQL query to check username and password
             String query = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
@@ -50,16 +62,43 @@ public class MainFormController {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
                 // User found, handle successful login
-                System.out.println("Login successful!");
+                showAlert(AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
+                btnsignin.getScene().getWindow().hide();
+
+                // Clear the fields
+                txtuname.clear();
+                txtpword.clear();
+
+                Parent root = FXMLLoader.load(getClass().getResource("/view/Dashboard.fxml"));
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Dashboard");
+                stage.show();
+
+
+
             } else {
                 // User not found, handle login failure
-                System.out.println("Invalid username or password.");
+                showAlert(AlertType.ERROR, "Login Failed", "Invalid username or password.");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle SQL exceptions (e.g., show error message to user)
+            showAlert(AlertType.ERROR, "Database Error", "An error occurred while connecting to the database.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    // Method to show alerts
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // No header text
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
