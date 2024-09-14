@@ -110,5 +110,8 @@
         -fx-background-radius: 5px;
 }
 
-
+.info-card{
+    -fx-background-color: linear-gradient(to bottom, #6b2f39, #3c8256);
+    -fx-background-radius: 5px;
+}
 

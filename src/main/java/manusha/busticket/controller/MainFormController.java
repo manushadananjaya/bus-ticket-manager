@@ -10,6 +10,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import manusha.busticket.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -21,6 +22,8 @@ import java.util.EventObject;
 
 import javafx.event.ActionEvent;
 
+
+
 public class MainFormController {
 
     @FXML
@@ -31,6 +34,8 @@ public class MainFormController {
 
     @FXML
     private TextField txtuname;
+    private double x= 0;
+    private double y=0;
 
     @FXML
     private void initialize() {
@@ -72,8 +77,22 @@ public class MainFormController {
                 txtpword.clear();
 
                 Parent root = FXMLLoader.load(getClass().getResource("/view/Dashboard.fxml"));
-                Scene scene = new Scene(root);
+
                 Stage stage = new Stage();
+
+                Scene scene = new Scene(root);
+
+                root.setOnMousePressed(e -> {
+                    x = e.getSceneX();
+                    y = e.getSceneY();
+                });
+
+                root.setOnMouseDragged(e -> {
+                    stage.setX(e.getScreenX() - x);
+                    stage.setY(e.getScreenY() - y);
+                });
+
+                stage.initStyle(StageStyle.TRANSPARENT);
                 stage.setScene(scene);
                 stage.setTitle("Dashboard");
                 stage.show();
