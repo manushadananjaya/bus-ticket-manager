@@ -23,6 +23,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -166,6 +167,128 @@ public class DashboardController implements Initializable {
         availableB_date.setValue(null);
         availableB_status.getSelectionModel().clearSelection();
     }
+
+    public void setAvailableBusDelete() {
+        Bus bus = availableB_tableView.getSelectionModel().getSelectedItem();
+        if (bus == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select a bus to delete.");
+            return;
+        }
+
+        // Show a confirmation alert before deleting the bus
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete Confirmation");
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText("Are you sure you want to delete the bus with ID " + bus.getBusId() + "?");
+
+        // Wait for user's confirmation
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // If the user confirmed, proceed with deletion
+            try {
+                String query = "DELETE FROM buses WHERE busId = ?";
+                try (Connection conn = DatabaseConnection.getConnection();
+                     PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setInt(1, bus.getBusId());
+                    int dbResult = pstmt.executeUpdate();
+                    if (dbResult > 0) {
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Bus deleted successfully.");
+                        availableBusShowBusData();
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete bus.");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // If the user canceled, show a cancellation message
+            showAlert(Alert.AlertType.INFORMATION, "Cancelled", "Bus deletion cancelled.");
+        }
+    }
+
+    // Update bus data in the database
+public void availableBusUpdate() {
+    String busId = availableB_busId.getText();
+    String location = availableB_location.getText();
+    String price = availableB_price.getText();
+    String date = availableB_date.getValue() != null ? availableB_date.getValue().toString() : "";
+    String status = availableB_status.getSelectionModel().getSelectedItem();
+
+    if(busId.isEmpty() && location.isEmpty() && price.isEmpty() && date.isEmpty() && status == null) {
+        showAlert(Alert.AlertType.WARNING, "Validation Error", "Please Select a Bus.");
+        return;
+
+    }
+    else if (busId.isEmpty() || location.isEmpty() || price.isEmpty() || date.isEmpty() || status == null) {
+        showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
+        return;
+    }
+
+    try {
+        // Parse price and update the database
+        double busPrice = Double.parseDouble(price);
+        String query = "UPDATE buses SET busLocation = ?, busPrice = ?, busDate = ?, busStatus = ? WHERE busId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, location);
+            pstmt.setDouble(2, busPrice);
+            pstmt.setString(3, date);
+            pstmt.setString(4, status);
+            pstmt.setString(5, busId);
+
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Bus updated successfully.");
+                availableBusShowBusData();
+                availableBusReset();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update bus.");
+            }
+        }
+    } catch (NumberFormatException e) {
+        showAlert(Alert.AlertType.ERROR, "Validation Error", "Invalid price format.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+    public void availableBusSearch() {
+        // search by any field in the table
+        String search = availableB_search.getText();
+        if (search.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a search term.");
+            return;
+        }
+
+        String query = "SELECT * FROM buses WHERE busId LIKE ? OR busLocation LIKE ? OR busPrice LIKE ? OR busDate LIKE ? OR busStatus LIKE ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, "%" + search + "%");
+            pstmt.setString(2, "%" + search + "%");
+            pstmt.setString(3, "%" + search + "%");
+            pstmt.setString(4, "%" + search + "%");
+            pstmt.setString(5, "%" + search + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            availableBusListData.clear();
+            while (rs.next()) {
+                availableBusListData.add(new Bus(
+                        rs.getInt("busId"),
+                        rs.getString("busStatus"),
+                        rs.getString("busLocation"),
+                        rs.getDate("busDate"),
+                        rs.getDouble("busPrice")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     // Initialize ComboBox with status options
     public void comboBoxStatus() {

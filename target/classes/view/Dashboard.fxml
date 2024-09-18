@@ -338,9 +338,9 @@
                                  </font>
                               </Label>
                               <Button fx:id="availableB_addBtn" layoutX="28.0" layoutY="371.0" mnemonicParsing="false" onAction="#availableBusAdd" prefHeight="26.0" prefWidth="98.0" text="Add" />
-                              <Button fx:id="availableB_updateBtn" layoutX="143.0" layoutY="371.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Update" />
+                              <Button fx:id="availableB_updateBtn" layoutX="143.0" layoutY="371.0" mnemonicParsing="false" onAction="#availableBusUpdate" prefHeight="26.0" prefWidth="96.0" text="Update" />
                               <Button fx:id="availableB_resetBtn" layoutX="28.0" layoutY="436.0" mnemonicParsing="false" onAction="#availableBusReset" prefHeight="26.0" prefWidth="98.0" text="Reset" />
-                              <Button fx:id="availableB_delBtn" layoutX="142.0" layoutY="436.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Delete" />
+                              <Button fx:id="availableB_delBtn" layoutX="141.0" layoutY="436.0" mnemonicParsing="false" onAction="#setAvailableBusDelete" prefHeight="26.0" prefWidth="100.0" text="Delete" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="293.0" layoutY="15.0" prefHeight="693.0" prefWidth="631.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
@@ -349,12 +349,12 @@
                                 <columns>
                                   <TableColumn fx:id="availableB_col_busId" prefWidth="125.0" text="Bus ID" />
                                   <TableColumn fx:id="availableB_col_location" minWidth="0.0" prefWidth="117.0" text="Location" />
-                                    <TableColumn fx:id="availableB_col_status" prefWidth="137.0" text="Type" />
+                                    <TableColumn fx:id="availableB_col_status" prefWidth="137.0" text="Status" />
                                     <TableColumn fx:id="availableB_col_price" prefWidth="108.0" text="Price" />
                                     <TableColumn fx:id="availableB_col_date" minWidth="0.0" prefWidth="121.0" text="Date" />
                                 </columns>
                               </TableView>
-                              <TextField fx:id="availableB_search" layoutX="15.0" layoutY="30.0" prefHeight="29.0" prefWidth="160.0" promptText="Search">
+                              <TextField fx:id="availableB_search" layoutX="15.0" layoutY="30.0" onKeyTyped="#availableBusSearch" prefHeight="29.0" prefWidth="160.0" promptText="Search">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
