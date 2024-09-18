@@ -295,7 +295,7 @@
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="695.0" prefWidth="261.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>
-                              <TextField layoutX="68.0" layoutY="45.0">
+                              <TextField fx:id="availableB_busId" layoutX="68.0" layoutY="45.0">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -320,7 +320,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="availableB_status" layoutX="68.0" layoutY="138.0" prefWidth="150.0" promptText="Choose" />
+                              <ComboBox fx:id="availableB_status" layoutX="68.0" layoutY="138.0" onAction="#comboBoxStatus" prefWidth="150.0" promptText="Choose" />
                               <TextField fx:id="availableB_price" layoutX="68.0" layoutY="185.0">
                                  <font>
                                     <Font size="14.0" />
@@ -331,27 +331,27 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="availableB_date" layoutX="68.0" layoutY="233.0" prefHeight="26.0" prefWidth="172.0" />
+                              <DatePicker fx:id="availableB_date" layoutX="68.0" layoutY="233.0" onMouseClicked="#availableBSelectBusData" prefHeight="26.0" prefWidth="172.0" />
                               <Label layoutX="25.0" layoutY="237.0" text="Date:">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="availableB_addBtn" layoutX="28.0" layoutY="371.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Add" />
+                              <Button fx:id="availableB_addBtn" layoutX="28.0" layoutY="371.0" mnemonicParsing="false" onAction="#availableBusAdd" prefHeight="26.0" prefWidth="98.0" text="Add" />
                               <Button fx:id="availableB_updateBtn" layoutX="143.0" layoutY="371.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Update" />
-                              <Button fx:id="availableB_resetBtn" layoutX="28.0" layoutY="436.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Reset" />
+                              <Button fx:id="availableB_resetBtn" layoutX="28.0" layoutY="436.0" mnemonicParsing="false" onAction="#availableBusReset" prefHeight="26.0" prefWidth="98.0" text="Reset" />
                               <Button fx:id="availableB_delBtn" layoutX="142.0" layoutY="436.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Delete" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="293.0" layoutY="15.0" prefHeight="693.0" prefWidth="631.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>
-                              <TableView fx:id="availableB_tableView" layoutX="15.0" layoutY="70.0" prefHeight="614.0" prefWidth="609.0">
+                              <TableView fx:id="availableB_tableView" layoutX="15.0" layoutY="70.0" onMouseClicked="#availableBSelectBusData" prefHeight="614.0" prefWidth="609.0">
                                 <columns>
-                                  <TableColumn fx:id="availableB_col_busId" prefWidth="117.0" text="Bus ID" />
-                                  <TableColumn fx:id="availableB_col_location" minWidth="0.0" prefWidth="149.0" text="Location" />
-                                    <TableColumn fx:id="availableB_col_type" prefWidth="107.0" text="Type" />
-                                    <TableColumn fx:id="availableB_col_price" prefWidth="129.0" text="Price" />
-                                    <TableColumn fx:id="availableB_col_date" prefWidth="106.0" text="Date" />
+                                  <TableColumn fx:id="availableB_col_busId" prefWidth="125.0" text="Bus ID" />
+                                  <TableColumn fx:id="availableB_col_location" minWidth="0.0" prefWidth="117.0" text="Location" />
+                                    <TableColumn fx:id="availableB_col_status" prefWidth="137.0" text="Type" />
+                                    <TableColumn fx:id="availableB_col_price" prefWidth="108.0" text="Price" />
+                                    <TableColumn fx:id="availableB_col_date" minWidth="0.0" prefWidth="121.0" text="Date" />
                                 </columns>
                               </TableView>
                               <TextField fx:id="availableB_search" layoutX="15.0" layoutY="30.0" prefHeight="29.0" prefWidth="160.0" promptText="Search">

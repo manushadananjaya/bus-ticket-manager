@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
@@ -18,243 +19,84 @@ import manusha.busticket.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class DashboardController {
-    @FXML
-    private AnchorPane main_form;
+public class DashboardController implements Initializable {
 
     @FXML
-    private Button availableB_addBtn;
+    private AnchorPane main_form, availableB_form, bookingTicket_form, customer_form, dashboard_form;
+
+    @FXML
+    private Button availableB_addBtn, availableB_btn, availableB_delBtn, availableB_resetBtn, availableB_updateBtn;
+    @FXML
+    private Button bookingTicket_btn, customers_btn, close_btn, logout_btn, min_btn, dashboard_btn;
 
     @FXML
     private TableView<Bus> availableB_tableView;
 
     @FXML
-    private Button availableB_btn;
+    private TableColumn<Bus, String> availableB_col_busId, availableB_col_date, availableB_col_location, availableB_col_price, availableB_col_status;
 
     @FXML
-    private TextField availableB_busId;
-
-    @FXML
-    private TableColumn<Bus, String> availableB_col_busId;
-
-    @FXML
-    private TableColumn<Bus, String> availableB_col_date;
-
-    @FXML
-    private TableColumn<Bus, String> availableB_col_location;
-
-    @FXML
-    private TableColumn<Bus, String> availableB_col_price;
-
-    @FXML
-    private TableColumn<Bus, String> availableB_col_type;
+    private TextField availableB_busId, availableB_location, availableB_price, availableB_search, cus_search;
 
     @FXML
     private DatePicker availableB_date;
 
     @FXML
-    private Button availableB_delBtn;
-
-    @FXML
-    private AnchorPane availableB_form;
-
-    @FXML
-    private TextField availableB_location;
-
-    @FXML
-    private TextField availableB_price;
-
-    @FXML
-    private Button availableB_resetBtn;
-
-    @FXML
-    private TextField availableB_search;
-
-    @FXML
     private ComboBox<String> availableB_status;
-
-    @FXML
-    private Button availableB_updateBtn;
-
-    @FXML
-    private Button bookingTicket_btn;
-
-    @FXML
-    private ComboBox<String> bookingTicket_busId;
-
-    @FXML
-    private DatePicker bookingTicket_date;
-
-    @FXML
-    private TextField bookingTicket_firstName;
-
-    @FXML
-    private AnchorPane bookingTicket_form;
-
-    @FXML
-    private ComboBox<String> bookingTicket_gender;
-
-    @FXML
-    private TextField bookingTicket_lastName;
-
-    @FXML
-    private ComboBox<String> bookingTicket_location;
-
-    @FXML
-    private TextField bookingTicket_phoneNum;
-
-    @FXML
-    private Button bookingTicket_resetBtn;
-
-    @FXML
-    private Label bookingTicket_sci_busId;
-
-    @FXML
-    private Label bookingTicket_sci_date;
-
-    @FXML
-    private Label bookingTicket_sci_firstName;
-
-    @FXML
-    private Label bookingTicket_sci_gender;
-
-    @FXML
-    private Label bookingTicket_sci_lastName;
-
-    @FXML
-    private Label bookingTicket_sci_location;
-
-    @FXML
-    private Button bookingTicket_sci_payBtn;
-
-    @FXML
-    private Label bookingTicket_sci_phoneNum;
-
-    @FXML
-    private Button bookingTicket_sci_recBtn;
-
-    @FXML
-    private Label bookingTicket_sci_ticketNum;
-
-    @FXML
-    private Label bookingTicket_sci_type;
-
-    @FXML
-    private Button bookingTicket_selectBtn;
-
-    @FXML
-    private Button close_btn;
-
-    @FXML
-    private TextField cus_search;
-
-    @FXML
-    private TableView<String> cus_table;
-
-    @FXML
-    private TableColumn<String, String> customer_busId;
-
-    @FXML
-    private TableColumn<String, String> customer_customerNum;
-
-    @FXML
-    private TableColumn<String, String> customer_date;
-
-    @FXML
-    private TableColumn<String, String> customer_firstName;
-
-    @FXML
-    private AnchorPane customer_form;
-
-    @FXML
-    private TableColumn<String, String> customer_gender;
-
-    @FXML
-    private TableColumn<String, String> customer_lastName;
-
-    @FXML
-    private TableColumn<String, String> customer_location;
-
-    @FXML
-    private TableColumn<String, String> customer_phone;
-
-    @FXML
-    private TableColumn<String, String> customer_ticketNum;
-
-    @FXML
-    private TableColumn<String, String> customer_type;
-
-    @FXML
-    private Button customers_btn;
-
-    @FXML
-    private Label dashboard_availableB;
-
-    @FXML
-    private Button dashboard_btn;
 
     @FXML
     private AreaChart<String, Number> dashboard_chart;
 
     @FXML
-    private AnchorPane dashboard_form;
-
-    @FXML
-    private Label dashboard_incomeTodal;
-
-    @FXML
-    private Label dashboard_todayIncome;
-
-    @FXML
-    private Button logout_btn;
-
-    @FXML
-    private Button min_btn;
+    private Label dashboard_incomeTodal, dashboard_todayIncome;
 
     // Database Connection
-    private DatabaseConnection databaseConnection = new DatabaseConnection();
     private Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
     private Statement statement;
 
-    // Fetch available buses
+    // ObservableList to hold the bus data
+    private ObservableList<Bus> availableBusListData;
+
+    // Array for status options
+    private final String[] statusList = {"Available", "Not Available"};
+
+    // Fetch available buses from the database
     public ObservableList<Bus> getAvailableBuses() {
         ObservableList<Bus> buses = FXCollections.observableArrayList();
-        try {
-            connection = DatabaseConnection.getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM buses");
+        String query = "SELECT * FROM buses";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
-            while (resultSet.next()) {
+            while (rs.next()) {
                 buses.add(new Bus(
-                        resultSet.getInt("busId"),
-                        resultSet.getString("busType"),
-                        resultSet.getString("busLocation"),
-                        resultSet.getDate("busDate"),
-                        resultSet.getDouble("busPrice")
+                        rs.getInt("busId"),
+                        rs.getString("busStatus"),
+                        rs.getString("busLocation"),
+                        rs.getDate("busDate"),
+                        rs.getDouble("busPrice")
                 ));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return buses;
     }
 
-    // Show bus data in TableView
-    private ObservableList<Bus> availableBusListData;
+    // Show bus data in the TableView
     public void availableBusShowBusData() {
         availableBusListData = getAvailableBuses();
 
         availableB_col_busId.setCellValueFactory(new PropertyValueFactory<>("busId"));
-        availableB_col_type.setCellValueFactory(new PropertyValueFactory<>("busType"));
+        availableB_col_status.setCellValueFactory(new PropertyValueFactory<>("busStatus"));
         availableB_col_location.setCellValueFactory(new PropertyValueFactory<>("busLocation"));
         availableB_col_date.setCellValueFactory(new PropertyValueFactory<>("busDate"));
         availableB_col_price.setCellValueFactory(new PropertyValueFactory<>("busPrice"));
@@ -262,38 +104,61 @@ public class DashboardController {
         availableB_tableView.setItems(availableBusListData);
     }
 
-    // Add a bus
+    // Add a bus to the database
     public void availableBusAdd() {
         String busId = availableB_busId.getText();
         String location = availableB_location.getText();
         String price = availableB_price.getText();
-        String date = availableB_date.getValue().toString();
+        String date = availableB_date.getValue() != null ? availableB_date.getValue().toString() : "";
+        String status = availableB_status.getSelectionModel().getSelectedItem();
 
-        if (busId.isEmpty() || location.isEmpty() || price.isEmpty() || date.isEmpty()) {
+        if (busId.isEmpty() || location.isEmpty() || price.isEmpty() || date.isEmpty() || status == null) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
             return;
         }
 
         try {
-            connection = DatabaseConnection.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO buses(busId, busLocation, busPrice, busDate) VALUES(?, ?, ?, ?)");
-            preparedStatement.setString(1, busId);
-            preparedStatement.setString(2, location);
-            preparedStatement.setString(3, price);
-            preparedStatement.setString(4, date);
-
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Bus added successfully.");
-                availableBusShowBusData();
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to add bus.");
+            // Check if bus ID is already in the database
+            String checkQuery = "SELECT * FROM buses WHERE busId = ?";
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(checkQuery)) {
+                pstmt.setString(1, busId);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Bus ID already exists.");
+                    return;
+                }
             }
-        } catch (Exception e) {
+
+            // Parse price and insert into database
+            double busPrice = Double.parseDouble(price);
+            String query = "INSERT INTO buses(busId, busLocation, busPrice, busDate, busStatus) VALUES(?, ?, ?, ?, ?)";
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+                pstmt.setString(1, busId);
+                pstmt.setString(2, location);
+                pstmt.setDouble(3, busPrice);
+                pstmt.setString(4, date);
+                pstmt.setString(5, status);
+
+                int result = pstmt.executeUpdate();
+                if (result > 0) {
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Bus added successfully.");
+                    availableBusShowBusData();
+                    availableBusReset();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to add bus.");
+                }
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Invalid price format.");
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // Reset the form fields
     public void availableBusReset() {
         availableB_busId.setText("");
         availableB_location.setText("");
@@ -302,12 +167,16 @@ public class DashboardController {
         availableB_status.getSelectionModel().clearSelection();
     }
 
+    // Initialize ComboBox with status options
+    public void comboBoxStatus() {
+        ObservableList<String> ListStatus = FXCollections.observableArrayList(statusList);
+        availableB_status.setItems(ListStatus);
+    }
 
-    // Select a bus for updating
+    // Select bus data from the TableView for updating
     public void availableBSelectBusData() {
         Bus bus = availableB_tableView.getSelectionModel().getSelectedItem();
-        int num = availableB_tableView.getSelectionModel().getSelectedIndex();
-        if (num < 0) {
+        if (bus == null) {
             showAlert(Alert.AlertType.ERROR, "Error", "Please select a bus to update.");
             return;
         }
@@ -315,7 +184,8 @@ public class DashboardController {
         availableB_busId.setText(String.valueOf(bus.getBusId()));
         availableB_location.setText(bus.getBusLocation());
         availableB_price.setText(String.valueOf(bus.getBusPrice()));
-        availableB_date.setValue(LocalDate.parse(bus.getBusDate().toString()));
+        availableB_date.setValue(bus.getBusDate().toLocalDate());  // Fix the date conversion here
+        availableB_status.setValue(bus.getBusStatus());
     }
 
     // Alert method
@@ -342,25 +212,19 @@ public class DashboardController {
 
     // Switch between forms
     public void switchForm(ActionEvent event) {
+        dashboard_form.setVisible(false);
+        availableB_form.setVisible(false);
+        bookingTicket_form.setVisible(false);
+        customer_form.setVisible(false);
+
         if (event.getSource() == dashboard_btn) {
             dashboard_form.setVisible(true);
-            availableB_form.setVisible(false);
-            bookingTicket_form.setVisible(false);
-            customer_form.setVisible(false);
         } else if (event.getSource() == availableB_btn) {
-            dashboard_form.setVisible(false);
+            availableBusShowBusData();
             availableB_form.setVisible(true);
-            bookingTicket_form.setVisible(false);
-            customer_form.setVisible(false);
         } else if (event.getSource() == bookingTicket_btn) {
-            dashboard_form.setVisible(false);
-            availableB_form.setVisible(false);
             bookingTicket_form.setVisible(true);
-            customer_form.setVisible(false);
         } else if (event.getSource() == customers_btn) {
-            dashboard_form.setVisible(false);
-            availableB_form.setVisible(false);
-            bookingTicket_form.setVisible(false);
             customer_form.setVisible(true);
         }
     }
@@ -389,5 +253,6 @@ public class DashboardController {
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         availableBusShowBusData();
+        comboBoxStatus();
     }
 }

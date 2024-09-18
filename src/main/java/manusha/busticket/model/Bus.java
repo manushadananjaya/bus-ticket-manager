@@ -1,18 +1,18 @@
 package manusha.busticket.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Bus {
 
     private int busId;
-    private String busType;
+    private String busStatus;
     private String busLocation;
     private Date busDate;
     private double busPrice;
 
-    public Bus(int busId, String busType, String busLocation, Date busDate, double busPrice) {
+    public Bus(int busId, String busStatus, String busLocation, Date busDate, double busPrice) {
         this.busId = busId;
-        this.busType = busType;
+        this.busStatus = busStatus;
         this.busLocation = busLocation;
         this.busDate = busDate;
         this.busPrice = busPrice;
@@ -24,11 +24,11 @@ public class Bus {
     public void setBusId(int busId) {
         this.busId = busId;
     }
-    public String getBusType() {
-        return busType;
+    public String getBusStatus() {
+        return busStatus;
     }
     public void setBusType(String busType) {
-        this.busType = busType;
+        this.busStatus = busType;
     }
     public String getBusLocation() {
         return busLocation;
@@ -45,6 +45,7 @@ public class Bus {
     public double getBusPrice() {
         return busPrice;
     }
+
     public void setBusPrice(double busPrice) {
         this.busPrice = busPrice;
     }
