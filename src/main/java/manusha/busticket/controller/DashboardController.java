@@ -22,6 +22,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import javafx.event.ActionEvent;
 import manusha.busticket.model.Bus;
+import manusha.busticket.model.Customer;
 import manusha.busticket.util.DatabaseConnection;
 
 
@@ -144,6 +145,44 @@ public class DashboardController implements Initializable {
 
     @FXML
     private ComboBox<String> bookingTicket_gender;
+
+
+
+    @FXML
+    private TableView<Customer> cus_table;
+
+    @FXML
+    private TableColumn<?, ?> customer_busId;
+
+
+    @FXML
+    private TableColumn<?, ?> customer_customerId;
+
+    @FXML
+    private TableColumn<?, ?> customer_date;
+
+    @FXML
+    private TableColumn<?, ?> customer_firstName;
+
+
+
+    @FXML
+    private TableColumn<?, ?> customer_gender;
+
+    @FXML
+    private TableColumn<?, ?> customer_lastName;
+
+    @FXML
+    private TableColumn<?, ?> customer_location;
+
+    @FXML
+    private TableColumn<?, ?> customer_phone;
+
+    @FXML
+    private TableColumn<?, ?> customer_ticketNum;
+
+    @FXML
+    private TableColumn<?, ?> customer_total;
 
 
     @FXML
@@ -720,6 +759,95 @@ public void availableBusUpdate() {
         availableB_totalSeats.setText(String.valueOf(bus.getBusSeats()));
     }
 
+
+    //Customer Table
+    public ObservableList<Customer> getCustomerData() {
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+        String query = "SELECT * FROM customer";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+
+            while (rs.next()) {
+
+                customers.add(new Customer(
+                        rs.getInt("customerID"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("gender"),
+                        rs.getString("phoneNo"),
+                        rs.getDate("customerDate"),
+                        rs.getString("location"),
+                        rs.getInt("busId"),
+                        rs.getInt("ticketNo"),
+                        rs.getDouble("total")
+                ));
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
+    public void customerShowData() {
+        ObservableList<Customer> customers = getCustomerData();
+
+        customer_customerId.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customer_firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        customer_lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        customer_gender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        customer_phone.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
+        customer_date.setCellValueFactory(new PropertyValueFactory<>("customerDate"));
+        customer_location.setCellValueFactory(new PropertyValueFactory<>("location"));
+        customer_busId.setCellValueFactory(new PropertyValueFactory<>("busId"));
+        customer_ticketNum.setCellValueFactory(new PropertyValueFactory<>("ticketNo"));
+        customer_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        cus_table.setItems(customers);
+    }
+
+    public void customerSearch() {
+        // search by any field in the table
+        String search = cus_search.getText();
+
+        String query = "SELECT * FROM customer WHERE customerID LIKE ? OR firstName LIKE ? OR lastName LIKE ? OR phoneNo LIKE ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, "%" + search + "%");
+            pstmt.setString(2, "%" + search + "%");
+            pstmt.setString(3, "%" + search + "%");
+            pstmt.setString(4, "%" + search + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            ObservableList<Customer> customers = FXCollections.observableArrayList();
+            while (rs.next()) {
+                customers.add(new Customer(
+                        rs.getInt("customerID"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("gender"),
+                        rs.getString("phoneNo"),
+                        rs.getDate("customerDate"),
+                        rs.getString("location"),
+                        rs.getInt("busId"),
+                        rs.getInt("ticketNo"),
+                        rs.getDouble("total")
+                ));
+            }
+            cus_table.setItems(customers);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
     // Alert method
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -764,6 +892,7 @@ public void availableBusUpdate() {
 
         } else if (event.getSource() == customers_btn) {
             customer_form.setVisible(true);
+            customerShowData();
         }
     }
 
@@ -796,5 +925,6 @@ public void availableBusUpdate() {
         busLocationList();
         ticketNumList();
         genderList();
+        customerShowData();
     }
 }

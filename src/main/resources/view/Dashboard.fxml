@@ -56,7 +56,7 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css">
+                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false">
                      <children>
                         <AnchorPane layoutX="6.0" layoutY="9.0" prefHeight="221.0" prefWidth="919.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                            <children>
@@ -262,25 +262,25 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="customer_form" layoutX="266.0" layoutY="224.0" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="customer_form" layoutX="266.0" layoutY="224.0" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="10.0" prefHeight="696.0" prefWidth="918.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>
                               <TableView fx:id="cus_table" layoutX="10.0" layoutY="70.0" prefHeight="612.0" prefWidth="899.0">
                                 <columns>
-                                  <TableColumn fx:id="customer_customerNum" prefWidth="78.0" text="Customer #" />
+                                  <TableColumn fx:id="customer_customerId" prefWidth="78.0" text="Customer #" />
                                   <TableColumn fx:id="customer_ticketNum" prefWidth="63.0" text="Ticket #" />
                                     <TableColumn fx:id="customer_firstName" prefWidth="105.0" text="First Name" />
                                     <TableColumn fx:id="customer_lastName" prefWidth="97.0" text="Last Name" />
-                                    <TableColumn fx:id="customer_gender" prefWidth="69.0" text="Gender" />
-                                    <TableColumn fx:id="customer_phone" prefWidth="112.0" text="Phone #" />
+                                    <TableColumn fx:id="customer_gender" prefWidth="69.0" text="Phone" />
+                                    <TableColumn fx:id="customer_phone" prefWidth="112.0" text="Gender" />
                                     <TableColumn fx:id="customer_busId" prefWidth="82.0" text="Bus ID" />
                                     <TableColumn fx:id="customer_location" prefWidth="126.0" text="Location" />
-                                    <TableColumn fx:id="customer_type" prefWidth="70.0" text="Type" />
-                                    <TableColumn fx:id="customer_date" prefWidth="96.0" text="Date" />
+                                    <TableColumn fx:id="customer_date" prefWidth="70.0" text="Date" />
+                                    <TableColumn fx:id="customer_total" prefWidth="96.0" text="Total" />
                                 </columns>
                               </TableView>
-                              <TextField fx:id="cus_search" layoutX="10.0" layoutY="25.0" prefHeight="26.0" prefWidth="284.0" promptText="Search" />
+                              <TextField fx:id="cus_search" layoutX="10.0" layoutY="25.0" onKeyTyped="#customerSearch" prefHeight="26.0" prefWidth="284.0" promptText="Search" />
                            </children>
                         </AnchorPane>
                      </children>
