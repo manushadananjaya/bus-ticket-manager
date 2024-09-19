@@ -281,6 +281,7 @@
                                 </columns>
                               </TableView>
                               <TextField fx:id="cus_search" layoutX="10.0" layoutY="25.0" onKeyTyped="#customerSearch" prefHeight="26.0" prefWidth="284.0" promptText="Search" />
+                              <Button fx:id="cusBtn_delCustomer" layoutX="768.0" layoutY="25.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="141.0" text="Delete Customer" />
                            </children>
                         </AnchorPane>
                      </children>

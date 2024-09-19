@@ -128,6 +128,10 @@ public class DashboardController implements Initializable {
     @FXML
     private Button bookingTicket_sci_recBtn;
 
+
+    @FXML
+    private Button cusBtn_delCustomer;
+
     @FXML
     private Label bookingTicket_sci_ticketNum;
 
@@ -841,6 +845,46 @@ public void availableBusUpdate() {
             cus_table.setItems(customers);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    //delete selected customer
+    public void deleteCustomer() {
+        Customer customer = cus_table.getSelectionModel().getSelectedItem();
+        if (customer == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select a customer to delete.");
+            return;
+        }
+
+        // Show a confirmation alert before deleting the customer
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete Confirmation");
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText("Are you sure you want to delete the customer with ID " + customer.getCustomerID() + "?");
+
+        // Wait for user's confirmation
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // If the user confirmed, proceed with deletion
+            try {
+                String query = "DELETE FROM customer WHERE customerID = ?";
+                try (Connection conn = DatabaseConnection.getConnection();
+                     PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setInt(1, customer.getCustomerID());
+                    int dbResult = pstmt.executeUpdate();
+                    if (dbResult > 0) {
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Customer deleted successfully.");
+                        customerShowData();
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete customer.");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // If the user canceled, show a cancellation message
+            showAlert(Alert.AlertType.INFORMATION, "Cancelled", "Customer deletion cancelled.");
         }
     }
 
