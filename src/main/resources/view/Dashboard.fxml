@@ -56,7 +56,7 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false">
+                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css">
                      <children>
                         <AnchorPane layoutX="6.0" layoutY="9.0" prefHeight="221.0" prefWidth="919.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                            <children>
@@ -223,7 +223,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_location" layoutX="449.0" layoutY="150.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_location" layoutX="449.0" layoutY="150.0" prefHeight="23.0" prefWidth="212.0" text="label">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -253,7 +253,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="bookingTicket_sci_recBtn" layoutX="522.0" layoutY="331.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="161.0" text="Receipt">
+                              <Button fx:id="bookingTicket_sci_recBtn" layoutX="522.0" layoutY="331.0" mnemonicParsing="false" onAction="#Receipt" prefHeight="69.0" prefWidth="161.0" text="Receipt">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -285,7 +285,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="695.0" prefWidth="261.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>

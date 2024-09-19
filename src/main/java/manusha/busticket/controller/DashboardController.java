@@ -13,11 +13,26 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+
+
 import javafx.event.ActionEvent;
 import manusha.busticket.model.Bus;
 import manusha.busticket.util.DatabaseConnection;
 
+
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import javafx.stage.FileChooser;
+
+import java.io.OutputStream;
+
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
@@ -583,6 +598,7 @@ public void availableBusUpdate() {
                 updateSeatsPstmt.executeUpdate();
 
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Payment successful.");
+                Receipt();
 
                 // Reset fields after successful payment
                 bookingTicketReset();
@@ -593,6 +609,97 @@ public void availableBusUpdate() {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public void Receipt(){
+
+        // Get the customer ID from the database and save it to variable
+        String customerId = "SELECT customerID FROM customer ORDER BY customerID DESC LIMIT 1";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(customerId);
+            int customerID = 0;
+            while (rs.next()) {
+                customerID = rs.getInt("customerID");
+            }
+            generateReceiptAndAskToSave(String.valueOf(customerID), bookingTicket_sci_firstName.getText(), bookingTicket_sci_lastName.getText(), bookingTicket_sci_busId.getText(), bookingTicket_sci_location.getText(), bookingTicket_sci_ticketNum.getText(), bookingTicket_sci_total.getText());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    //generate Reciept
+    public void generateReceiptAndAskToSave(String customerId, String firstName, String lastName, String busId, String location, String ticketNo, String total) {
+        Document document = new Document();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try {
+            // Create the PDF in memory
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+
+            // Add content to the PDF
+            document.add(new Paragraph("Payment Receipt"));
+            document.add(new Paragraph("************************"));
+            document.add(new Paragraph("Customer ID: " + customerId));
+            document.add(new Paragraph("First Name: " + firstName));
+            document.add(new Paragraph("Last Name: " + lastName));
+            document.add(new Paragraph("Bus ID: " + busId));
+            document.add(new Paragraph("Location: " + location));
+            document.add(new Paragraph("Ticket No: " + ticketNo));
+            document.add(new Paragraph("Total Paid: " + total));
+            document.add(new Paragraph("************************"));
+            document.add(new Paragraph("Thank you for your payment!"));
+
+            // Close the document after writing
+            document.close();
+
+            // Ask the user if they want to save the PDF
+            boolean userWantsToSave = askUserToSave(); // This method shows a dialog asking the user
+
+            if (userWantsToSave) {
+                // Use FileChooser to let the user select where to save the PDF
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Receipt");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+                // Show save dialog to the user
+                Stage stage = new Stage(); // You may need to get the actual stage of your app
+                java.io.File file = fileChooser.showSaveDialog(stage);
+
+                if (file != null) {
+                    // Save the PDF to the selected location
+                    try (OutputStream fileOutputStream = new FileOutputStream(file)) {
+                        outputStream.writeTo(fileOutputStream);
+                        showAlert(Alert.AlertType.INFORMATION, "Receipt Saved", "Your receipt was saved successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean askUserToSave() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Save Receipt");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you want to save the receipt?");
+
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+        // Wait for user's response
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == yesButton;
     }
 
         // Initialize ComboBox with status options
