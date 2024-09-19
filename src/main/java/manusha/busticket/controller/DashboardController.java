@@ -385,6 +385,23 @@ public void availableBusUpdate() {
             }
             ObservableList<String> busId = FXCollections.observableArrayList(busIdList);
             bookingTicket_busId.setItems(busId);
+
+            // Get the total number of seats available for the selected bus
+            bookingTicket_busId.setOnAction(event -> {
+                String selectedBusId = bookingTicket_busId.getSelectionModel().getSelectedItem();
+                String query = "SELECT busSeats FROM buses WHERE busId = ?";
+                try (Connection connection = DatabaseConnection.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                    preparedStatement.setString(1, selectedBusId);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        bookingTicket_availableSeats.setText(String.valueOf(resultSet.getInt("busSeats")));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
