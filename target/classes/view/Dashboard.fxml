@@ -38,19 +38,24 @@
          <left>
             <AnchorPane prefHeight="731.0" prefWidth="204.0" styleClass="nav-form" stylesheets="@dashboardDesign.css" BorderPane.alignment="CENTER">
                <children>
-                  <Circle layoutX="102.0" layoutY="73.0" radius="42.0" stroke="BLACK" strokeType="INSIDE" />
-                  <Label layoutX="58.0" layoutY="127.0" text="Welcome" textFill="WHITE">
+                  <Circle layoutX="100.0" layoutY="76.0" radius="46.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label layoutX="27.0" layoutY="120.0" prefHeight="44.0" prefWidth="43.0" text="HI!" textFill="WHITE">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="30.0" />
                      </font>
                   </Label>
-                  <Label fx:id="dashboard_username" layoutX="81.0" layoutY="160.0" text="User" textFill="WHITE" />
-                  <Line endX="76.5" layoutX="107.0" layoutY="200.0" startX="-93.5" stroke="WHITE" />
+                  <Label fx:id="dashboard_username" layoutX="48.0" layoutY="172.0" prefHeight="29.0" prefWidth="107.0" text="User" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font></Label>
+                  <Line endX="76.5" layoutX="109.0" layoutY="213.0" startX="-93.5" stroke="WHITE" />
                   <Button fx:id="dashboard_btn" layoutX="14.0" layoutY="235.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard" />
                   <Button fx:id="availableB_btn" layoutX="14.0" layoutY="280.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Available Buses" />
                   <Button fx:id="bookingTicket_btn" layoutX="14.0" layoutY="325.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Booking Ticket" />
                   <Button fx:id="customers_btn" layoutX="14.0" layoutY="369.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Customers" />
                   <Button fx:id="logout_btn" layoutX="54.0" layoutY="582.0" mnemonicParsing="false" onAction="#logout" styleClass="logout-btn" stylesheets="@dashboardDesign.css" text="Logout" />
+                  <Circle fill="DODGERBLUE" layoutX="100.0" layoutY="58.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle fill="DODGERBLUE" layoutX="100.0" layoutY="98.0" radius="24.0" stroke="BLACK" strokeType="INSIDE" />
                </children></AnchorPane>
          </left>
          <center>
@@ -163,7 +168,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_firstName" layoutX="173.0" layoutY="109.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_firstName" layoutX="173.0" layoutY="109.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -173,7 +178,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_lastName" layoutX="173.0" layoutY="148.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_lastName" layoutX="173.0" layoutY="148.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -183,7 +188,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_gender" layoutX="173.0" layoutY="184.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_gender" layoutX="173.0" layoutY="184.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -193,7 +198,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_phoneNum" layoutX="173.0" layoutY="224.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_phoneNum" layoutX="173.0" layoutY="224.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -203,27 +208,27 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_date" layoutX="171.0" layoutY="265.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_date" layoutX="171.0" layoutY="265.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="386.0" layoutY="111.0" prefHeight="23.0" prefWidth="58.0" text="Bus ID:">
+                              <Label layoutX="382.0" layoutY="117.0" prefHeight="23.0" prefWidth="58.0" text="Bus ID:">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_busId" layoutX="449.0" layoutY="111.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_busId" layoutX="445.0" layoutY="117.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="368.0" layoutY="150.0" prefHeight="23.0" prefWidth="79.0" text="Location:">
+                              <Label layoutX="367.0" layoutY="148.0" prefHeight="23.0" prefWidth="79.0" text="Location:">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_location" layoutX="449.0" layoutY="150.0" prefHeight="23.0" prefWidth="212.0" text="label">
+                              <Label fx:id="bookingTicket_sci_location" layoutX="448.0" layoutY="148.0" prefHeight="23.0" prefWidth="212.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -233,7 +238,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_ticketNum" layoutX="449.0" layoutY="184.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_ticketNum" layoutX="449.0" layoutY="184.0" prefHeight="23.0" prefWidth="138.0" text="N/A">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -268,9 +273,9 @@
                            <children>
                               <TableView fx:id="cus_table" layoutX="10.0" layoutY="70.0" prefHeight="612.0" prefWidth="899.0">
                                 <columns>
-                                  <TableColumn fx:id="customer_customerId" prefWidth="78.0" text="Customer #" />
-                                  <TableColumn fx:id="customer_ticketNum" prefWidth="63.0" text="Ticket #" />
-                                    <TableColumn fx:id="customer_firstName" prefWidth="105.0" text="First Name" />
+                                  <TableColumn fx:id="customer_customerId" prefWidth="78.0" text="Customer ID" />
+                                  <TableColumn fx:id="customer_ticketNum" prefWidth="74.83355712890625" text="Ticket Num" />
+                                    <TableColumn fx:id="customer_firstName" prefWidth="93.16644287109375" text="First Name" />
                                     <TableColumn fx:id="customer_lastName" prefWidth="97.0" text="Last Name" />
                                     <TableColumn fx:id="customer_gender" prefWidth="69.0" text="Phone" />
                                     <TableColumn fx:id="customer_phone" prefWidth="112.0" text="Gender" />
@@ -281,7 +286,7 @@
                                 </columns>
                               </TableView>
                               <TextField fx:id="cus_search" layoutX="10.0" layoutY="25.0" onKeyTyped="#customerSearch" prefHeight="26.0" prefWidth="284.0" promptText="Search" />
-                              <Button fx:id="cusBtn_delCustomer" layoutX="768.0" layoutY="25.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="141.0" text="Delete Customer" />
+                              <Button fx:id="cusBtn_delCustomer" layoutX="768.0" layoutY="25.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="141.0" text="Delete Customer" textFill="#f20000" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -383,13 +388,13 @@
                                              </font>
                                           </Label>
                                        </bottom>
-                                       <center>
-                                          <Label fx:id="dashboard_availableB" prefHeight="34.0" prefWidth="88.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
+                                       <right>
+                                          <Label fx:id="dashboard_availableB" prefHeight="34.0" prefWidth="187.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="48.0" />
                                              </font>
                                           </Label>
-                                       </center>
+                                       </right>
                                     </BorderPane>
                                     <BorderPane layoutX="322.0" layoutY="10.0" prefHeight="200.0" prefWidth="274.0" styleClass="card2" stylesheets="@dashboardDesign.css">
                                        <bottom>
@@ -399,20 +404,20 @@
                                              </font>
                                           </Label>
                                        </bottom>
-                                       <center>
-                                          <Label fx:id="dashboard_todayIncome" prefHeight="23.0" prefWidth="76.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </center>
                                        <top>
-                                          <Label prefHeight="41.0" prefWidth="127.0" text="LKR" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
+                                          <Label prefHeight="67.0" prefWidth="127.0" text="LKR" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font size="24.0" />
                                              </font>
                                           </Label>
                                        </top>
+                                       <right>
+                                          <Label fx:id="dashboard_todayIncome" prefHeight="60.0" prefWidth="221.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Label>
+                                       </right>
                                     </BorderPane>
                                     <BorderPane layoutX="622.0" layoutY="10.0" prefHeight="200.0" prefWidth="274.0" styleClass="card3" stylesheets="@dashboardDesign.css">
                                        <bottom>
@@ -423,19 +428,19 @@
                                           </Label>
                                        </bottom>
                                        <top>
-                                          <Label prefHeight="40.0" prefWidth="117.0" text="LKR" textFill="WHITE" BorderPane.alignment="CENTER">
+                                          <Label prefHeight="68.0" prefWidth="117.0" text="LKR" textFill="WHITE" BorderPane.alignment="CENTER">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font size="24.0" />
                                              </font>
                                           </Label>
                                        </top>
-                                       <center>
-                                          <Label fx:id="dashboard_incomeTodal" prefHeight="17.0" prefWidth="99.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
+                                       <right>
+                                          <Label fx:id="dashboard_incomeTodal" prefHeight="44.0" prefWidth="215.0" text="0" textFill="WHITE" BorderPane.alignment="CENTER">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="36.0" />
                                              </font>
                                           </Label>
-                                       </center>
+                                       </right>
                                     </BorderPane>
                                  </children>
                               </AnchorPane>
