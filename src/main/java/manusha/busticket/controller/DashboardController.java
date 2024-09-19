@@ -374,6 +374,9 @@ public void availableBusUpdate() {
     }
 
     //Booking ticket System
+
+    public int AvailableTicket;
+
     public void BusIdList() {
         String busD = "SELECT * FROM buses WHERE busStatus = 'Available'";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -386,19 +389,11 @@ public void availableBusUpdate() {
             ObservableList<String> busId = FXCollections.observableArrayList(busIdList);
             bookingTicket_busId.setItems(busId);
 
-            // Get the total number of seats available for the selected bus
+            // When a bus is selected
             bookingTicket_busId.setOnAction(event -> {
                 String selectedBusId = bookingTicket_busId.getSelectionModel().getSelectedItem();
-                String query = "SELECT busSeats FROM buses WHERE busId = ?";
-                try (Connection connection = DatabaseConnection.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                    preparedStatement.setString(1, selectedBusId);
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    if (resultSet.next()) {
-                        bookingTicket_availableSeats.setText(String.valueOf(resultSet.getInt("busSeats")));
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                if (selectedBusId != null) {
+                    updateAvailableSeats(selectedBusId); // Get available seats
                 }
             });
 
@@ -407,7 +402,26 @@ public void availableBusUpdate() {
         }
     }
 
-    public void busLocationList(){
+    // Method to update available seats based on the selected bus
+    private void updateAvailableSeats(String busId) {
+        String query = "SELECT busSeats FROM buses WHERE busId = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, busId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+
+                AvailableTicket = resultSet.getInt("busSeats");
+                bookingTicket_availableSeats.setText(String.valueOf(AvailableTicket));
+                ticketNumList();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void busLocationList() {
         String locationL = "SELECT * FROM buses WHERE busStatus = 'Available'";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -423,15 +437,20 @@ public void availableBusUpdate() {
         }
     }
 
-    public void ticketNumList(){
-        List<String> listTicket = new ArrayList<>();
-        for (int q = 1; q <= 40; q++){
-            listTicket.add(String.valueOf(q));
-        }
-        ObservableList<String> listT = FXCollections.observableArrayList(listTicket);
-        bookingTicket_ticketNum.setItems(listT);
-    }
+    // Populate the ticket number combo box based on available seats
+    public void ticketNumList() {
+        if (AvailableTicket > 0) {
+            List<String> listTicket = new ArrayList<>();
+            for (int q = 1; q <= AvailableTicket; q++) {
+                listTicket.add(String.valueOf(q));
+            }
+            ObservableList<String> listT = FXCollections.observableArrayList(listTicket);
+            bookingTicket_ticketNum.setItems(listT);
+        } else {
 
+            bookingTicket_ticketNum.getItems().clear();
+        }
+    }
 
     public void bookingTicketSelect() {
         String firstName = bookingTicket_firstName.getText();
