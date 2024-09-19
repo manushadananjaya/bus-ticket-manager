@@ -545,43 +545,46 @@ public void availableBusUpdate() {
     }
 
 
-    private int countRow;
+
+
     public void bookingTicketPay() {
 
-        String payData = "INSERT INTO customer(customerID, firstName, lastName , gender , phoneNo, customerDate, location, busId, ticketNo, total) VALUES (?,?,?,?,?,?,?,?,?,?)";
-
+        String payData = "INSERT INTO customer(firstName, lastName, gender, phoneNo, customerDate, location, busId, ticketNo, total) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = DatabaseConnection.getConnection();
-            String CountNum = "SELECT COUNT(customerID) FROM customer";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(CountNum);
 
-            while (rs.next()) {
-                countRow = rs.getInt("COUNT(customerID)");
-            }
-
+            // Validate fields before attempting to pay
             if (bookingTicket_sci_firstName.getText().isEmpty() || bookingTicket_sci_lastName.getText().isEmpty() || bookingTicket_sci_phoneNum.getText().isEmpty() || bookingTicket_sci_gender.getText().isEmpty() || bookingTicket_sci_date.getText().isEmpty() || bookingTicket_sci_location.getText().isEmpty() || bookingTicket_sci_busId.getText().isEmpty() || bookingTicket_sci_ticketNum.getText().isEmpty() || bookingTicket_sci_total.getText().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
                 return;
             }
 
+            // Prepare the SQL statement for inserting customer details (without customerID since it's AUTO_INCREMENT)
             PreparedStatement pstmt = conn.prepareStatement(payData);
-            pstmt.setString(1, String.valueOf(countRow));
-            pstmt.setString(2, bookingTicket_sci_firstName.getText());
-            pstmt.setString(3, bookingTicket_sci_lastName.getText());
-            pstmt.setString(4, bookingTicket_sci_gender.getText());
-            pstmt.setString(5, bookingTicket_sci_phoneNum.getText());
-            pstmt.setString(6, bookingTicket_sci_date.getText());
-            pstmt.setString(7, bookingTicket_sci_location.getText());
-            pstmt.setString(8, bookingTicket_sci_busId.getText());
-            pstmt.setString(9, bookingTicket_sci_ticketNum.getText());
-            pstmt.setString(10, bookingTicket_sci_total.getText());
-
+            pstmt.setString(1, bookingTicket_sci_firstName.getText());
+            pstmt.setString(2, bookingTicket_sci_lastName.getText());
+            pstmt.setString(3, bookingTicket_sci_gender.getText());
+            pstmt.setString(4, bookingTicket_sci_phoneNum.getText());
+            pstmt.setString(5, bookingTicket_sci_date.getText());
+            pstmt.setString(6, bookingTicket_sci_location.getText());
+            pstmt.setString(7, bookingTicket_sci_busId.getText());
+            pstmt.setString(8, bookingTicket_sci_ticketNum.getText());
+            pstmt.setString(9, bookingTicket_sci_total.getText());
 
             int result = pstmt.executeUpdate();
+
             if (result > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Payment Successful.");
+                // Update available seats in the buses table after payment
+                String updateSeats = "UPDATE buses SET busSeats = busSeats - ? WHERE busId = ?";
+                PreparedStatement updateSeatsPstmt = conn.prepareStatement(updateSeats);
+                updateSeatsPstmt.setInt(1, Integer.parseInt(bookingTicket_sci_ticketNum.getText()));
+                updateSeatsPstmt.setString(2, bookingTicket_sci_busId.getText());
+                updateSeatsPstmt.executeUpdate();
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Payment successful.");
+
+                // Reset fields after successful payment
                 bookingTicketReset();
                 bookingTicketSelectReset();
             } else {
@@ -590,7 +593,6 @@ public void availableBusUpdate() {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
         // Initialize ComboBox with status options
@@ -602,15 +604,11 @@ public void availableBusUpdate() {
     // Select bus data from the TableView for updating
     public void availableBSelectBusData() {
         Bus bus = availableB_tableView.getSelectionModel().getSelectedItem();
-        if (bus == null) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Please select a bus to update.");
-            return;
-        }
 
         availableB_busId.setText(String.valueOf(bus.getBusId()));
         availableB_location.setText(bus.getBusLocation());
         availableB_price.setText(String.valueOf(bus.getBusPrice()));
-        availableB_date.setValue(bus.getBusDate().toLocalDate());  // Fix the date conversion here
+        availableB_date.setValue(bus.getBusDate().toLocalDate());
         availableB_status.setValue(bus.getBusStatus());
         availableB_totalSeats.setText(String.valueOf(bus.getBusSeats()));
     }
