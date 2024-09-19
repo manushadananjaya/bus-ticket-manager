@@ -37,6 +37,10 @@ public class MainFormController {
     private double x= 0;
     private double y=0;
 
+    public static class getData{
+        public static String username;
+    }
+
     @FXML
     private void initialize() {
         btnsignin.setOnAction(this::handleSignIn);
@@ -67,6 +71,8 @@ public class MainFormController {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
+                getData.username = resultSet.getString("username");
 
                 // User found, handle successful login
                 showAlert(AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");

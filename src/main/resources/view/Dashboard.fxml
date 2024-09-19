@@ -44,7 +44,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="81.0" layoutY="160.0" text="User" textFill="WHITE" />
+                  <Label fx:id="dashboard_username" layoutX="81.0" layoutY="160.0" text="User" textFill="WHITE" />
                   <Line endX="76.5" layoutX="107.0" layoutY="200.0" startX="-93.5" stroke="WHITE" />
                   <Button fx:id="dashboard_btn" layoutX="14.0" layoutY="235.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Dashboard" />
                   <Button fx:id="availableB_btn" layoutX="14.0" layoutY="280.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="176.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Available Buses" />
@@ -262,7 +262,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="customer_form" layoutX="266.0" layoutY="224.0" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="customer_form" layoutX="266.0" layoutY="224.0" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="10.0" prefHeight="696.0" prefWidth="918.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>
@@ -369,7 +369,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="dashboard_form" visible="false">
+                  <AnchorPane fx:id="dashboard_form">
                      <children>
                         <BorderPane layoutX="1.0" prefHeight="221.0" prefWidth="911.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                            <center>

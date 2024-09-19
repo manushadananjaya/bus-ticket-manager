@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -188,9 +189,20 @@ public class DashboardController implements Initializable {
     @FXML
     private TableColumn<?, ?> customer_total;
 
+    @FXML
+    private Label dashboard_availableB;
+
 
     @FXML
-    private Label dashboard_incomeTodal, dashboard_todayIncome;
+    private Label dashboard_incomeTodal;
+
+    @FXML
+    private Label dashboard_todayIncome;
+
+
+    @FXML
+    private Label dashboard_username;
+
 
     // Database Connection
     private Connection connection;
@@ -889,6 +901,86 @@ public void availableBusUpdate() {
     }
 
 
+    //Dashboard form
+    public void dashboardDisplayAvailableBuses() {
+        String query = "SELECT COUNT(*) FROM buses WHERE busStatus = 'Available'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                dashboard_availableB.setText(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardDisplayTotalIncome() {
+        String query = "SELECT SUM(total) FROM customer";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                dashboard_incomeTodal.setText(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardDisplayTodayIncome() {
+        String query = "SELECT SUM(total) FROM customer WHERE customerDate = CURDATE()";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                dashboard_todayIncome.setText(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayUsername() {
+        dashboard_username.setText(MainFormController.getData.username);
+    }
+
+
+    public void setDashboard_chart() {
+        // Clear the previous data from the chart
+        dashboard_chart.getData().clear();
+
+        // SQL query to group data by customerDate and sum the total
+        String query = "SELECT customerDate, SUM(total) FROM customer WHERE customerDate IS NOT NULL GROUP BY customerDate ORDER BY TIMESTAMP(customerDate) ASC LIMIT 9";
+
+        // Create a new series for the chart
+        XYChart.Series<String, Number> chart = new XYChart.Series<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            // Loop through the result set and add data to the series
+            while (rs.next()) {
+                String date = rs.getString(1);
+                double sumTotal = rs.getDouble(2);
+
+                // Add data point to the chart series
+                chart.getData().add(new XYChart.Data<>(date, sumTotal));
+            }
+
+            // Add the chart series to the chart
+            dashboard_chart.getData().add(chart);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
 
 
@@ -970,5 +1062,11 @@ public void availableBusUpdate() {
         ticketNumList();
         genderList();
         customerShowData();
+        dashboardDisplayAvailableBuses();
+        dashboardDisplayTotalIncome();
+        dashboardDisplayTodayIncome();
+        displayUsername();
+        setDashboard_chart();
+
     }
 }
