@@ -4,13 +4,72 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manusha.busticket.controller.MainFormController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manusha.busticket.controller.MainFormController">
    <children>
-      <Label layoutX="212.0" layoutY="67.0" text="Welcome to Bus Ticket Manager" />
-      <TextField fx:id="txtuname" layoutX="220.0" layoutY="119.0" promptText="User Name" />
-      <TextField fx:id="txtpword" layoutX="220.0" layoutY="163.0" promptText="Password" />
-      <Button fx:id="btnsignin" layoutX="273.0" layoutY="221.0" mnemonicParsing="false" text="Sign In" />
+      <AnchorPane fx:id="form_signin" prefHeight="400.0" prefWidth="600.0" styleClass="topform" stylesheets="@mainformDesign.css">
+         <children>
+            <Label layoutX="70.0" layoutY="31.0" prefHeight="56.0" prefWidth="489.0" text="Welcome to Bus Ticket Manager">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtuname" layoutX="168.0" layoutY="131.0" prefHeight="42.0" prefWidth="265.0" promptText="User Name">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtpword" layoutX="168.0" layoutY="200.0" prefHeight="42.0" prefWidth="265.0" promptText="Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Button fx:id="btnsignin" layoutX="185.0" layoutY="276.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="116.0" text="Sign In">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="btn_mainform_register" layoutX="317.0" layoutY="276.0" mnemonicParsing="false" onAction="#registerForm" prefHeight="42.0" prefWidth="116.0" text="Register">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="form_reg" layoutY="1.0" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <Label layoutX="208.0" layoutY="26.0" prefHeight="17.0" prefWidth="185.0" text="Register ">
+               <font>
+                  <Font name="System Bold Italic" size="48.0" />
+               </font>
+            </Label>
+            <TextField fx:id="register_username" layoutX="163.0" layoutY="127.0" prefHeight="42.0" prefWidth="276.0" promptText="Enter Your UserName">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="register_password" layoutX="163.0" layoutY="186.0" prefHeight="42.0" prefWidth="276.0" promptText="Enter Your Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="register_confrimPassword" layoutX="163.0" layoutY="248.0" prefHeight="42.0" prefWidth="276.0" promptText="Confirm Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Button fx:id="register_submitBtn" layoutX="163.0" layoutY="317.0" mnemonicParsing="false" onAction="#handleRegistration" prefHeight="42.0" prefWidth="135.0" text="Submit ">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="register_signinBtn" layoutX="318.0" layoutY="317.0" mnemonicParsing="false" onAction="#signInForm" prefHeight="42.0" prefWidth="135.0" text="Sign In">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
