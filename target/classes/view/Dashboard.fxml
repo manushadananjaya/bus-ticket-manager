@@ -56,7 +56,7 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false">
+                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css">
                      <children>
                         <AnchorPane layoutX="6.0" layoutY="9.0" prefHeight="221.0" prefWidth="919.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                            <children>
@@ -65,25 +65,19 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="bookingTicket_busId" layoutX="138.0" layoutY="29.0" prefWidth="150.0" promptText="Choose" />
+                              <ComboBox fx:id="bookingTicket_busId" layoutX="138.0" layoutY="29.0" onAction="#BusIdList" prefWidth="150.0" promptText="Choose" />
                               <Label layoutX="53.0" layoutY="74.0" prefHeight="23.0" prefWidth="85.0" text="Location:">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                               <ComboBox fx:id="bookingTicket_location" layoutX="138.0" layoutY="73.0" prefWidth="150.0" promptText="Choose" />
-                              <Label layoutX="80.0" layoutY="122.0" prefHeight="23.0" prefWidth="58.0" text="Type:">
+                              <Label layoutX="57.0" layoutY="121.0" prefHeight="23.0" prefWidth="81.0" text="Ticket #:">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ComboBox layoutX="138.0" layoutY="120.0" prefWidth="150.0" promptText="Choose" />
-                              <Label layoutX="57.0" layoutY="168.0" prefHeight="23.0" prefWidth="81.0" text="Ticket #:">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox layoutX="138.0" layoutY="167.0" prefWidth="150.0" promptText="Choose" />
+                              <ComboBox fx:id="bookingTicket_ticketNum" layoutX="138.0" layoutY="120.0" onAction="#ticketNumList" prefWidth="150.0" promptText="Choose" />
                               <AnchorPane layoutX="360.0" layoutY="5.0" prefHeight="214.0" prefWidth="557.0" styleClass="info-card" stylesheets="@dashboardDesign.css">
                                  <children>
                                     <Label layoutX="14.0" layoutY="7.0" prefHeight="43.0" prefWidth="237.0" text="Customer Information" textFill="WHITE">
@@ -116,7 +110,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="bookingTicket_gender" layoutX="107.0" layoutY="158.0" prefWidth="150.0" promptText="Choose" />
+                                    <ComboBox fx:id="bookingTicket_gender" layoutX="107.0" layoutY="158.0" onAction="#genderList" prefWidth="150.0" promptText="Choose" />
                                     <Label layoutX="307.0" layoutY="63.0" prefHeight="18.0" prefWidth="55.0" text="Phone #:" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
@@ -133,12 +127,12 @@
                                        </font>
                                     </Label>
                                     <DatePicker fx:id="bookingTicket_date" layoutX="371.0" layoutY="107.0" prefHeight="26.0" prefWidth="172.0" />
-                                    <Button fx:id="bookingTicket_selectBtn" layoutX="455.0" layoutY="163.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="83.0" text="Select">
+                                    <Button fx:id="bookingTicket_selectBtn" layoutX="455.0" layoutY="163.0" mnemonicParsing="false" onAction="#bookingTicketSelect" prefHeight="34.0" prefWidth="83.0" text="Select">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="bookingTicket_resetBtn" layoutX="362.0" layoutY="164.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="83.0" text="Reset">
+                                    <Button fx:id="bookingTicket_resetBtn" layoutX="362.0" layoutY="164.0" mnemonicParsing="false" onAction="#bookingTicketReset" prefHeight="34.0" prefWidth="83.0" text="Reset">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -224,22 +218,12 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="395.0" layoutY="186.0" prefHeight="23.0" prefWidth="50.0" text="Type:">
+                              <Label layoutX="372.0" layoutY="184.0" prefHeight="23.0" prefWidth="72.0" text="Ticket #:">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="bookingTicket_sci_type" layoutX="449.0" layoutY="186.0" prefHeight="23.0" prefWidth="138.0" text="label">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="372.0" layoutY="226.0" prefHeight="23.0" prefWidth="72.0" text="Ticket #:">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="bookingTicket_sci_ticketNum" layoutX="449.0" layoutY="226.0" prefHeight="23.0" prefWidth="138.0" text="label">
+                              <Label fx:id="bookingTicket_sci_ticketNum" layoutX="449.0" layoutY="184.0" prefHeight="23.0" prefWidth="138.0" text="label">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -249,7 +233,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="768.0" layoutY="263.0" text="0.0">
+                              <Label fx:id="bookingTicket_sci_total" layoutX="768.0" layoutY="263.0" text="0.0">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -291,7 +275,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="695.0" prefWidth="261.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>

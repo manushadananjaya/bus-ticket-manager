@@ -20,7 +20,6 @@ import manusha.busticket.util.DatabaseConnection;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +49,75 @@ public class DashboardController implements Initializable {
 
     @FXML
     private ComboBox<String> availableB_status;
+    @FXML
+    private ComboBox<String> bookingTicket_busId;
+
+    @FXML
+    private ComboBox<String> bookingTicket_location;
+
+    @FXML
+    private ComboBox<String> bookingTicket_ticketNum;
 
     @FXML
     private AreaChart<String, Number> dashboard_chart;
+
+    @FXML
+    private TextField bookingTicket_firstName;
+
+    @FXML
+    private TextField bookingTicket_lastName;
+
+    @FXML
+    private DatePicker bookingTicket_date;
+
+
+    @FXML
+    private TextField bookingTicket_phoneNum;
+
+    @FXML
+    private Button bookingTicket_resetBtn;
+
+    @FXML
+    private Label bookingTicket_sci_busId;
+
+    @FXML
+    private Label bookingTicket_sci_date;
+
+    @FXML
+    private Label bookingTicket_sci_firstName;
+
+    @FXML
+    private Label bookingTicket_sci_gender;
+
+    @FXML
+    private Label bookingTicket_sci_lastName;
+
+    @FXML
+    private Label bookingTicket_sci_location;
+
+    @FXML
+    private Button bookingTicket_sci_payBtn;
+
+    @FXML
+    private Label bookingTicket_sci_phoneNum;
+
+    @FXML
+    private Button bookingTicket_sci_recBtn;
+
+    @FXML
+    private Label bookingTicket_sci_ticketNum;
+
+
+    @FXML
+    private Label bookingTicket_sci_total;
+
+
+    @FXML
+    private Button bookingTicket_selectBtn;
+
+    @FXML
+    private ComboBox<String> bookingTicket_gender;
+
 
     @FXML
     private Label dashboard_incomeTodal, dashboard_todayIncome;
@@ -288,7 +353,128 @@ public void availableBusUpdate() {
 
     }
 
+    //Booking ticket System
+    public void BusIdList() {
+        String busD = "SELECT * FROM buses WHERE busStatus = 'Available'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(busD)) {
+            List<String> busIdList = new ArrayList<>();
+            while (rs.next()) {
+                busIdList.add(rs.getString("busId"));
+            }
+            ObservableList<String> busId = FXCollections.observableArrayList(busIdList);
+            bookingTicket_busId.setItems(busId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void busLocationList(){
+        String locationL = "SELECT * FROM buses WHERE busStatus = 'Available'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(locationL)) {
+            List<String> locationList = new ArrayList<>();
+            while (rs.next()) {
+                locationList.add(rs.getString("busLocation"));
+            }
+            ObservableList<String> location = FXCollections.observableArrayList(locationList);
+            bookingTicket_location.setItems(location);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void ticketNumList(){
+        List<String> listTicket = new ArrayList<>();
+        for (int q = 1; q <= 40; q++){
+            listTicket.add(String.valueOf(q));
+        }
+        ObservableList<String> listT = FXCollections.observableArrayList(listTicket);
+        bookingTicket_ticketNum.setItems(listT);
+    }
+
+
+    public void bookingTicketSelect() {
+        String firstName = bookingTicket_firstName.getText();
+        String lastName = bookingTicket_lastName.getText();
+        String phoneNo = bookingTicket_phoneNum.getText();
+        String gender = (String) bookingTicket_gender.getSelectionModel().getSelectedItem();
+        String date = bookingTicket_date.getValue() != null ? bookingTicket_date.getValue().toString() : "";
+
+        String busId = bookingTicket_busId.getSelectionModel().getSelectedItem();
+        String location = bookingTicket_location.getSelectionModel().getSelectedItem();
+        String ticketNum = bookingTicket_ticketNum.getSelectionModel().getSelectedItem();
+
+
+        if (firstName.isEmpty() || lastName.isEmpty() || phoneNo.isEmpty() || gender == null || date.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
+            return;
+        }
+        if (busId == null || location == null || ticketNum == null) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please select a bus.");
+            return;
+        }
+
+        String totalPrice = "SELECT busPrice FROM buses WHERE busLocation = ?";
+
+        double total = 0;
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(totalPrice);
+            pstmt.setString(1, location);
+            ResultSet rs = pstmt.executeQuery();
+            total = 0;
+            while (rs.next()) {
+                total = rs.getDouble("busPrice") * Integer.parseInt(ticketNum);
+            }
+
+
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Invalid price format.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        bookingTicket_sci_busId.setText(busId);
+        bookingTicket_sci_date.setText(date);
+        bookingTicket_sci_firstName.setText(firstName);
+        bookingTicket_sci_gender.setText(gender);
+        bookingTicket_sci_lastName.setText(lastName);
+        bookingTicket_sci_location.setText(location);
+        bookingTicket_sci_phoneNum.setText(phoneNo);
+        bookingTicket_sci_ticketNum.setText(ticketNum);
+        bookingTicket_sci_total.setText(String.valueOf(total));
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Successfully Selected");
+
+
+    }
+
+    private String[] genderList = {"Male" , "Female", "Other"};
+
+    public void genderList(){
+        List<String> ListGender = new ArrayList<>();
+        for(String data : genderList){
+            ListGender.add(data);
+        }
+        ObservableList listGender = FXCollections.observableArrayList(ListGender);
+        bookingTicket_gender.setItems(listGender);
+    }
+
+    public void bookingTicketReset(){
+        bookingTicket_firstName.setText("");
+        bookingTicket_lastName.setText("");
+        bookingTicket_phoneNum.setText("");
+        bookingTicket_date.setValue(null);
+        bookingTicket_gender.getSelectionModel().clearSelection();
+        bookingTicket_busId.getSelectionModel().clearSelection();
+        bookingTicket_location.getSelectionModel().clearSelection();
+        bookingTicket_ticketNum.getSelectionModel().clearSelection();
+
+    }
 
     // Initialize ComboBox with status options
     public void comboBoxStatus() {
@@ -346,7 +532,13 @@ public void availableBusUpdate() {
             availableBusShowBusData();
             availableB_form.setVisible(true);
         } else if (event.getSource() == bookingTicket_btn) {
+
             bookingTicket_form.setVisible(true);
+            BusIdList();
+            busLocationList();
+            ticketNumList();
+            genderList();
+
         } else if (event.getSource() == customers_btn) {
             customer_form.setVisible(true);
         }
@@ -377,5 +569,9 @@ public void availableBusUpdate() {
     public void initialize(URL location, ResourceBundle resources) {
         availableBusShowBusData();
         comboBoxStatus();
+        BusIdList();
+        busLocationList();
+        ticketNumList();
+        genderList();
     }
 }
