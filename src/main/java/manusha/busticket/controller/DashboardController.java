@@ -344,7 +344,7 @@ public void availableBusUpdate() {
     public void availableBusSearch() {
         // search by any field in the table
         String search = availableB_search.getText();
-        
+
 
         String query = "SELECT * FROM buses WHERE busId LIKE ? OR busLocation LIKE ? OR busPrice LIKE ? OR busDate LIKE ? OR busStatus LIKE ?";
         try (Connection conn = DatabaseConnection.getConnection();
