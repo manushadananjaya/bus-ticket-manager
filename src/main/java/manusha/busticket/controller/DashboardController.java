@@ -42,13 +42,21 @@ public class DashboardController implements Initializable {
     private TableColumn<Bus, String> availableB_col_busId, availableB_col_date, availableB_col_location, availableB_col_price, availableB_col_status;
 
     @FXML
+    private TableColumn<?, ?> availableB_col_seats;
+
+    @FXML
     private TextField availableB_busId, availableB_location, availableB_price, availableB_search, cus_search;
+
+    @FXML
+    private TextField availableB_totalSeats;
 
     @FXML
     private DatePicker availableB_date;
 
     @FXML
     private ComboBox<String> availableB_status;
+
+
     @FXML
     private ComboBox<String> bookingTicket_busId;
 
@@ -107,6 +115,10 @@ public class DashboardController implements Initializable {
     @FXML
     private Label bookingTicket_sci_ticketNum;
 
+    @FXML
+    private Label bookingTicket_availableSeats;
+
+
 
     @FXML
     private Label bookingTicket_sci_total;
@@ -148,7 +160,8 @@ public class DashboardController implements Initializable {
                         rs.getString("busStatus"),
                         rs.getString("busLocation"),
                         rs.getDate("busDate"),
-                        rs.getDouble("busPrice")
+                        rs.getDouble("busPrice"),
+                        rs.getInt("busSeats")
                 ));
             }
         } catch (SQLException e) {
@@ -166,6 +179,8 @@ public class DashboardController implements Initializable {
         availableB_col_location.setCellValueFactory(new PropertyValueFactory<>("busLocation"));
         availableB_col_date.setCellValueFactory(new PropertyValueFactory<>("busDate"));
         availableB_col_price.setCellValueFactory(new PropertyValueFactory<>("busPrice"));
+        availableB_col_seats.setCellValueFactory(new PropertyValueFactory<>("busSeats"));
+
 
         availableB_tableView.setItems(availableBusListData);
     }
@@ -177,8 +192,9 @@ public class DashboardController implements Initializable {
         String price = availableB_price.getText();
         String date = availableB_date.getValue() != null ? availableB_date.getValue().toString() : "";
         String status = availableB_status.getSelectionModel().getSelectedItem();
+        int totalSeats = Integer.parseInt(availableB_totalSeats.getText());
 
-        if (busId.isEmpty() || location.isEmpty() || price.isEmpty() || date.isEmpty() || status == null) {
+        if (busId.isEmpty() || location.isEmpty() || price.isEmpty() || date.isEmpty() || status == null || totalSeats == 0) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
             return;
         }
@@ -198,7 +214,7 @@ public class DashboardController implements Initializable {
 
             // Parse price and insert into database
             double busPrice = Double.parseDouble(price);
-            String query = "INSERT INTO buses(busId, busLocation, busPrice, busDate, busStatus) VALUES(?, ?, ?, ?, ?)";
+            String query = "INSERT INTO buses(busId, busLocation, busPrice, busDate, busStatus , busSeats) VALUES(?, ?, ?, ?, ?, ?)";
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -207,6 +223,7 @@ public class DashboardController implements Initializable {
                 pstmt.setDouble(3, busPrice);
                 pstmt.setString(4, date);
                 pstmt.setString(5, status);
+                pstmt.setInt(6, totalSeats);
 
                 int result = pstmt.executeUpdate();
                 if (result > 0) {
@@ -231,6 +248,7 @@ public class DashboardController implements Initializable {
         availableB_price.setText("");
         availableB_date.setValue(null);
         availableB_status.getSelectionModel().clearSelection();
+        availableB_totalSeats.setText("");
     }
 
     public void setAvailableBusDelete() {
@@ -279,8 +297,9 @@ public void availableBusUpdate() {
     String price = availableB_price.getText();
     String date = availableB_date.getValue() != null ? availableB_date.getValue().toString() : "";
     String status = availableB_status.getSelectionModel().getSelectedItem();
+    int totalSeats = Integer.parseInt(availableB_totalSeats.getText());
 
-    if(busId.isEmpty() && location.isEmpty() && price.isEmpty() && date.isEmpty() && status == null) {
+    if(busId.isEmpty() && location.isEmpty() && price.isEmpty() && date.isEmpty() && status == null && totalSeats == 0) {
         showAlert(Alert.AlertType.WARNING, "Validation Error", "Please Select a Bus.");
         return;
 
@@ -293,7 +312,7 @@ public void availableBusUpdate() {
     try {
         // Parse price and update the database
         double busPrice = Double.parseDouble(price);
-        String query = "UPDATE buses SET busLocation = ?, busPrice = ?, busDate = ?, busStatus = ? WHERE busId = ?";
+        String query = "UPDATE buses SET busLocation = ?, busPrice = ?, busDate = ?, busStatus = ?, busSeats = ? WHERE busId = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -301,7 +320,10 @@ public void availableBusUpdate() {
             pstmt.setDouble(2, busPrice);
             pstmt.setString(3, date);
             pstmt.setString(4, status);
-            pstmt.setString(5, busId);
+
+            pstmt.setInt(5, totalSeats);
+            pstmt.setString(6, busId);
+
 
             int result = pstmt.executeUpdate();
             if (result > 0) {
@@ -322,10 +344,7 @@ public void availableBusUpdate() {
     public void availableBusSearch() {
         // search by any field in the table
         String search = availableB_search.getText();
-        if (search.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a search term.");
-            return;
-        }
+        
 
         String query = "SELECT * FROM buses WHERE busId LIKE ? OR busLocation LIKE ? OR busPrice LIKE ? OR busDate LIKE ? OR busStatus LIKE ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -344,7 +363,8 @@ public void availableBusUpdate() {
                         rs.getString("busStatus"),
                         rs.getString("busLocation"),
                         rs.getDate("busDate"),
-                        rs.getDouble("busPrice")
+                        rs.getDouble("busPrice"),
+                        rs.getInt("busSeats")
                 ));
             }
         } catch (SQLException e) {
@@ -476,7 +496,68 @@ public void availableBusUpdate() {
 
     }
 
-    // Initialize ComboBox with status options
+    public void bookingTicketSelectReset(){
+        bookingTicket_sci_busId.setText("");
+        bookingTicket_sci_date.setText("");
+        bookingTicket_sci_firstName.setText("");
+        bookingTicket_sci_gender.setText("");
+        bookingTicket_sci_lastName.setText("");
+        bookingTicket_sci_location.setText("");
+        bookingTicket_sci_phoneNum.setText("");
+        bookingTicket_sci_ticketNum.setText("");
+        bookingTicket_sci_total.setText("");
+    }
+
+
+    private int countRow;
+    public void bookingTicketPay() {
+
+        String payData = "INSERT INTO customer(customerID, firstName, lastName , gender , phoneNo, customerDate, location, busId, ticketNo, total) VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String CountNum = "SELECT COUNT(customerID) FROM customer";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(CountNum);
+
+            while (rs.next()) {
+                countRow = rs.getInt("COUNT(customerID)");
+            }
+
+            if (bookingTicket_sci_firstName.getText().isEmpty() || bookingTicket_sci_lastName.getText().isEmpty() || bookingTicket_sci_phoneNum.getText().isEmpty() || bookingTicket_sci_gender.getText().isEmpty() || bookingTicket_sci_date.getText().isEmpty() || bookingTicket_sci_location.getText().isEmpty() || bookingTicket_sci_busId.getText().isEmpty() || bookingTicket_sci_ticketNum.getText().isEmpty() || bookingTicket_sci_total.getText().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation Error", "Please fill in all fields.");
+                return;
+            }
+
+            PreparedStatement pstmt = conn.prepareStatement(payData);
+            pstmt.setString(1, String.valueOf(countRow));
+            pstmt.setString(2, bookingTicket_sci_firstName.getText());
+            pstmt.setString(3, bookingTicket_sci_lastName.getText());
+            pstmt.setString(4, bookingTicket_sci_gender.getText());
+            pstmt.setString(5, bookingTicket_sci_phoneNum.getText());
+            pstmt.setString(6, bookingTicket_sci_date.getText());
+            pstmt.setString(7, bookingTicket_sci_location.getText());
+            pstmt.setString(8, bookingTicket_sci_busId.getText());
+            pstmt.setString(9, bookingTicket_sci_ticketNum.getText());
+            pstmt.setString(10, bookingTicket_sci_total.getText());
+
+
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Payment Successful.");
+                bookingTicketReset();
+                bookingTicketSelectReset();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to pay.");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
+        // Initialize ComboBox with status options
     public void comboBoxStatus() {
         ObservableList<String> ListStatus = FXCollections.observableArrayList(statusList);
         availableB_status.setItems(ListStatus);
@@ -495,6 +576,7 @@ public void availableBusUpdate() {
         availableB_price.setText(String.valueOf(bus.getBusPrice()));
         availableB_date.setValue(bus.getBusDate().toLocalDate());  // Fix the date conversion here
         availableB_status.setValue(bus.getBusStatus());
+        availableB_totalSeats.setText(String.valueOf(bus.getBusSeats()));
     }
 
     // Alert method

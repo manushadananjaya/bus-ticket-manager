@@ -10,12 +10,15 @@ public class Bus {
     private Date busDate;
     private double busPrice;
 
-    public Bus(int busId, String busStatus, String busLocation, Date busDate, double busPrice) {
+    private int busSeats;
+
+    public Bus(int busId, String busStatus, String busLocation, Date busDate, double busPrice , int busSeats) {
         this.busId = busId;
         this.busStatus = busStatus;
         this.busLocation = busLocation;
         this.busDate = busDate;
         this.busPrice = busPrice;
+        this.busSeats = busSeats;
 
     }
     public int getBusId() {
@@ -39,6 +42,16 @@ public class Bus {
     public Date getBusDate() {
         return busDate;
     }
+
+    public int getBusSeats() {
+        return busSeats;
+    }
+    public void setBusSeats(int totalSeats) {
+        this.busSeats = totalSeats;
+    }
+
+
+
     public void setBusDate(Date busDate) {
         this.busDate = busDate;
     }

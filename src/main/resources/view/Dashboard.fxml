@@ -56,7 +56,7 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css">
+                  <AnchorPane fx:id="bookingTicket_form" layoutX="5.0" layoutY="5.0" prefHeight="200.0" prefWidth="200.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false">
                      <children>
                         <AnchorPane layoutX="6.0" layoutY="9.0" prefHeight="221.0" prefWidth="919.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                            <children>
@@ -139,6 +139,16 @@
                                     </Button>
                                  </children>
                               </AnchorPane>
+                              <Label layoutX="53.0" layoutY="165.0" prefHeight="23.0" prefWidth="130.0" text="Available Seats :">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="bookingTicket_availableSeats" layoutX="183.0" layoutY="165.0" prefHeight="23.0" prefWidth="130.0" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="7.0" layoutY="244.0" prefHeight="465.0" prefWidth="918.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
@@ -238,7 +248,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="bookingTicket_sci_payBtn" layoutX="708.0" layoutY="332.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="161.0" text="Pay">
+                              <Button fx:id="bookingTicket_sci_payBtn" layoutX="708.0" layoutY="332.0" mnemonicParsing="false" onAction="#bookingTicketPay" prefHeight="69.0" prefWidth="161.0" text="Pay">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -275,7 +285,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="availableB_form" focusTraversable="true" prefHeight="719.0" prefWidth="932.0" styleClass="shadow" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="695.0" prefWidth="261.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
                            <children>
@@ -325,6 +335,16 @@
                               <Button fx:id="availableB_updateBtn" layoutX="143.0" layoutY="371.0" mnemonicParsing="false" onAction="#availableBusUpdate" prefHeight="26.0" prefWidth="96.0" text="Update" />
                               <Button fx:id="availableB_resetBtn" layoutX="28.0" layoutY="436.0" mnemonicParsing="false" onAction="#availableBusReset" prefHeight="26.0" prefWidth="98.0" text="Reset" />
                               <Button fx:id="availableB_delBtn" layoutX="141.0" layoutY="436.0" mnemonicParsing="false" onAction="#setAvailableBusDelete" prefHeight="26.0" prefWidth="100.0" text="Delete" />
+                              <TextField fx:id="availableB_totalSeats" layoutX="103.0" layoutY="281.0" prefHeight="27.0" prefWidth="135.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="23.0" layoutY="286.0" text="Total Seats :">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="293.0" layoutY="15.0" prefHeight="693.0" prefWidth="631.0" styleClass="top-form" stylesheets="@dashboardDesign.css">
@@ -333,9 +353,10 @@
                                 <columns>
                                   <TableColumn fx:id="availableB_col_busId" prefWidth="125.0" text="Bus ID" />
                                   <TableColumn fx:id="availableB_col_location" minWidth="0.0" prefWidth="117.0" text="Location" />
-                                    <TableColumn fx:id="availableB_col_status" prefWidth="137.0" text="Status" />
-                                    <TableColumn fx:id="availableB_col_price" prefWidth="108.0" text="Price" />
-                                    <TableColumn fx:id="availableB_col_date" minWidth="0.0" prefWidth="121.0" text="Date" />
+                                    <TableColumn fx:id="availableB_col_status" prefWidth="119.0" text="Status" />
+                                    <TableColumn fx:id="availableB_col_price" prefWidth="85.0" text="Price" />
+                                    <TableColumn fx:id="availableB_col_date" minWidth="0.0" prefWidth="104.0" text="Date" />
+                                    <TableColumn fx:id="availableB_col_seats" prefWidth="76.0" text="Seats" />
                                 </columns>
                               </TableView>
                               <TextField fx:id="availableB_search" layoutX="15.0" layoutY="30.0" onKeyTyped="#availableBusSearch" prefHeight="29.0" prefWidth="160.0" promptText="Search">
