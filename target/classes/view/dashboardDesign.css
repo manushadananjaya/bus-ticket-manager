@@ -115,3 +115,17 @@
     -fx-background-radius: 5px;
 }
 
+.max-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #023020;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial";
+    -fx-alignment: CENTER_RIGHT;
+    -fx-border-color: #fff;
+}
+
+.max-btn:hover {
+    -fx-background-color: #008000;
+    -fx-text-fill: #fff;
+}

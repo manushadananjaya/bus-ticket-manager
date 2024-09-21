@@ -22,15 +22,16 @@
          <top>
             <AnchorPane prefHeight="82.0" prefWidth="1136.0" styleClass="semi-top-form" stylesheets="@dashboardDesign.css" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane layoutX="82.0" layoutY="-59.0" prefHeight="62.0" prefWidth="1136.0" styleClass="top-form" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane layoutX="3.5" layoutY="-59.0" prefHeight="68.0" prefWidth="1131.0" styleClass="top-form" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="close_btn" layoutX="1064.0" layoutY="16.0" mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@dashboardDesign.css" text="Close" />
-                        <Button fx:id="min_btn" layoutX="1014.0" layoutY="16.0" mnemonicParsing="false" onAction="#minimize" prefHeight="29.0" prefWidth="50.0" styleClass="minimize" stylesheets="@dashboardDesign.css" text="Min" textAlignment="CENTER" />
+                        <Button fx:id="close_btn" layoutX="1068.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" prefHeight="29.0" prefWidth="62.0" styleClass="close" stylesheets="@dashboardDesign.css" text="Close" />
+                        <Button fx:id="min_btn" layoutX="1008.0" layoutY="20.0" mnemonicParsing="false" onAction="#minimize" prefHeight="29.0" prefWidth="50.0" styleClass="minimize" stylesheets="@dashboardDesign.css" text="Min" textAlignment="CENTER" />
                         <Label layoutX="45.0" layoutY="23.0" text="Bus Ticket Booking Reservation System">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
+                        <Button fx:id="max_btn" layoutX="952.0" layoutY="20.0" mnemonicParsing="false" onAction="#maximize" prefHeight="29.0" prefWidth="56.0" styleClass="max-btn" stylesheets="@dashboardDesign.css" text="Max" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
                </children></AnchorPane>

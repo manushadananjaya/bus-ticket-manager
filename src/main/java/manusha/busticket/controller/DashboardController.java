@@ -1006,6 +1006,13 @@ public void availableBusUpdate() {
         }
     }
 
+    public void maximize() {
+        Stage stage = (Stage) main_form.getScene().getWindow();
+        if (stage != null) {
+            stage.setFullScreen(true);
+        }
+    }
+
     // Switch between forms
     public void switchForm(ActionEvent event) {
         dashboard_form.setVisible(false);
